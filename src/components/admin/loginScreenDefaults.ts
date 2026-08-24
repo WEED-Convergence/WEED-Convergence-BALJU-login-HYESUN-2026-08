@@ -35,6 +35,6 @@ export const FOOTER_FIELD_DEFS: { key: keyof LoginScreenFooterFields; label: str
   { key: 'phone', label: '전화번호' },
   { key: 'address', label: '주소' },
   { key: 'privacyOfficer', label: '개인정보책임자' },
-  { key: 'ceo', label: '대표이사' },
+  { key: 'ceo', label: '대표자' },
   { key: 'bizNumber', label: '사업자번호' },
 ];

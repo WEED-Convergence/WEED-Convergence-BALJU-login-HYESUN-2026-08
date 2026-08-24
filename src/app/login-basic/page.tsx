@@ -4,7 +4,6 @@ import LogoStack from '@/components/login/LogoStack';
 import AuthTabs from '@/components/login/AuthTabs';
 import LoginFields from '@/components/login/LoginFields';
 import SignupCTA from '@/components/login/SignupCTA';
-import Footer from '@/components/login/Footer';
 import CustomZone from '@/components/login/CustomZone';
 
 const ACCENT_COLOR = '#2F6FED';
@@ -25,9 +24,14 @@ export default function LoginBasicPage() {
       <AuthTabs />
       <LoginFields accentColor={ACCENT_COLOR} />
       <SignupCTA />
-      <div className="mt-8 px-6">
-        <CustomZone label="커스텀 · 푸터 텍스트" className="overflow-hidden p-0">
-          <Footer text="발주모아 파트너스 ㅣ 대표: 홍길동 ㅣ 서울특별시 강남구 테헤란로 000 ㅣ 사업자등록번호: 000-00-00000 ㅣ 고객센터: 1588-0000" />
+      <div className="mt-8 px-6 pb-6">
+        <CustomZone label="커스텀 · 푸터 텍스트" className="space-y-1 px-4 py-4 text-[10px] leading-relaxed text-gray-500">
+          <p>e-mail : help@baljumoa.com&nbsp;&nbsp;&nbsp;Tel : 1588-0000</p>
+          <p>주소 : 서울특별시 강남구 테헤란로 000&nbsp;&nbsp;개인정보책임자 : 김보호</p>
+          <p>
+            대표이사 : 홍길동&nbsp;&nbsp;&nbsp;사업자번호 : 000-00-00000&nbsp;
+            <span className="text-gray-400">[사업자정보확인]</span>
+          </p>
         </CustomZone>
       </div>
     </PhoneFrame>

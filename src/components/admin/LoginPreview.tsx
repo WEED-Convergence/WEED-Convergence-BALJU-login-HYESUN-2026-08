@@ -1,7 +1,6 @@
 import TopBar from '@/components/login/TopBar';
 import LogoStack from '@/components/login/LogoStack';
 import AuthTabs from '@/components/login/AuthTabs';
-import SignupCTA from '@/components/login/SignupCTA';
 import Footer from '@/components/login/Footer';
 import { LoginScreenSettingsState } from './loginScreenDefaults';
 
@@ -15,14 +14,14 @@ export default function LoginPreview({ settings }: Props) {
     settings.footer.phone,
     settings.footer.address,
     `개인정보책임자: ${settings.footer.privacyOfficer}`,
-    `대표이사: ${settings.footer.ceo}`,
+    `대표자: ${settings.footer.ceo}`,
     `사업자번호: ${settings.footer.bizNumber}`,
   ].join(' ㅣ ');
 
   return (
     <div className="sticky top-6">
       <p className="mb-3 text-center text-[11px] font-semibold uppercase tracking-wider text-gray-400">
-        실시간 미리보기
+        미리보기
       </p>
       <div
         className="mx-auto w-[280px] overflow-hidden rounded-[26px] border border-gray-300 shadow-lg"
@@ -87,9 +86,14 @@ export default function LoginPreview({ settings }: Props) {
           </div>
         </div>
 
-        <SignupCTA />
+        <p className="px-5 pt-5 text-center text-[11px] leading-relaxed text-gray-500">
+          판매사 회원가입 후 발주를 시작하세요.{' '}
+          <span className="cursor-pointer font-semibold text-[#1a8f5a] underline underline-offset-2">
+            입점 신청하기
+          </span>
+        </p>
 
-        <div className="mt-6">
+        <div className="mt-5">
           <Footer text={footerText} />
         </div>
       </div>
