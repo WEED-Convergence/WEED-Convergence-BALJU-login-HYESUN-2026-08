@@ -224,7 +224,7 @@ export default function CustomLoginScreenSettingsPanel({
             <path d="M9 18h6" />
           </svg>
           <p className="text-sm font-semibold text-gray-500">기본 타입은 고정 레이아웃으로 제공됩니다.</p>
-          <p className="text-xs text-gray-400">별도로 편집할 수 있는 항목이 없으며, 우측 미리보기에서 정적 화면을 확인할 수 있습니다.</p>
+          <p className="text-xs text-gray-400">별도로 편집할 수 있는 항목이 없으며, 우측 미리보기에서 화면을 확인할 수 있습니다.</p>
         </div>
       ) : (
       <div className="space-y-4 px-5 py-5">
