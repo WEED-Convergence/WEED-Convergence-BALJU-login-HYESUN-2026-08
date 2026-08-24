@@ -1,7 +1,6 @@
 'use client';
 
 import { ChangeEvent, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import {
   BANNER_POSITIONS,
   BLOCK_TYPE_DEFS,
@@ -88,7 +87,6 @@ export default function CustomLoginScreenSettingsPanel({
   onRemoveBlock,
   onReset,
 }: Props) {
-  const router = useRouter();
   const [pickerOpen, setPickerOpen] = useState(false);
   const [pendingType, setPendingType] = useState<BlockType | null>(null);
   const [draftText, setDraftText] = useState('');
@@ -177,16 +175,6 @@ export default function CustomLoginScreenSettingsPanel({
     <div className="rounded-lg border border-gray-200 bg-white">
       <div className="flex items-center gap-6 border-b border-gray-100 px-5 py-4">
         <span className="text-xs font-semibold text-gray-400">적용 타입 선택</span>
-        <label className="flex cursor-pointer items-center gap-2 text-sm font-semibold text-gray-400 hover:text-gray-600">
-          <input
-            type="radio"
-            name="screen-type"
-            checked={false}
-            onChange={() => router.push('/admin-login-basic')}
-            className="h-4 w-4 accent-gray-900"
-          />
-          기본 타입
-        </label>
         <label className="flex cursor-pointer items-center gap-2 text-sm font-semibold text-gray-900">
           <input type="radio" name="screen-type" checked readOnly className="h-4 w-4 accent-gray-900" />
           커스텀 타입
