@@ -6,14 +6,10 @@ import {
   BLOCK_TYPE_DEFS,
   BannerPosition,
   BlockType,
-  CUSTOM_FOOTER_FIELD_DEFS,
-  CustomFooterFields,
   CustomLoginScreenSettingsState,
   FreeBlock,
   nextBlockId,
 } from './customLoginScreenDefaults';
-import { MockProduct } from './mockProducts';
-import ProductPickerModal from './ProductPickerModal';
 
 type Tab = 'basic' | 'custom';
 
@@ -22,17 +18,15 @@ interface Props {
   onTabChange: (tab: Tab) => void;
   settings: CustomLoginScreenSettingsState;
   onLogoFile: (file: File | null) => void;
+  onButtonColorChange: (value: string) => void;
   onBannerToggle: (enabled: boolean) => void;
   onBannerPosition: (position: BannerPosition) => void;
   onBannerImageFile: (file: File | null) => void;
   onBannerLinkChange: (value: string) => void;
   onSubtitleChange: (value: string) => void;
   onBgColorChange: (value: string) => void;
-  onRecommendedToggle: (enabled: boolean) => void;
-  onProductsChange: (products: MockProduct[]) => void;
   onAddBlock: (block: FreeBlock) => void;
   onRemoveBlock: (id: string) => void;
-  onFooterChange: (key: keyof CustomFooterFields, value: string) => void;
   onReset: () => void;
 }
 
@@ -73,20 +67,17 @@ export default function CustomLoginScreenSettingsPanel({
   onTabChange,
   settings,
   onLogoFile,
+  onButtonColorChange,
   onBannerToggle,
   onBannerPosition,
   onBannerImageFile,
   onBannerLinkChange,
   onSubtitleChange,
   onBgColorChange,
-  onRecommendedToggle,
-  onProductsChange,
   onAddBlock,
   onRemoveBlock,
-  onFooterChange,
   onReset,
 }: Props) {
-  const [productPickerOpen, setProductPickerOpen] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [pendingType, setPendingType] = useState<BlockType | null>(null);
   const [draftText, setDraftText] = useState('');
@@ -191,6 +182,19 @@ export default function CustomLoginScreenSettingsPanel({
           </div>
 
           <div>
+            <label className="mb-1.5 block text-xs font-semibold text-gray-600">로그인 버튼 색상</label>
+            <div className="flex items-center gap-2">
+              <input
+                type="color"
+                value={settings.buttonColor}
+                onChange={(e) => onButtonColorChange(e.target.value)}
+                className="h-9 w-9 cursor-pointer rounded border border-gray-200 p-0.5"
+              />
+              <span className="font-mono text-xs text-gray-500">{settings.buttonColor}</span>
+            </div>
+          </div>
+
+          <div>
             <div className="mb-1.5 flex items-center justify-between">
               <label className="text-xs font-semibold text-gray-600">배너</label>
               <Toggle checked={settings.bannerEnabled} onChange={onBannerToggle} />
@@ -263,54 +267,6 @@ export default function CustomLoginScreenSettingsPanel({
               />
               <span className="font-mono text-xs text-gray-500">{settings.bgColor}</span>
             </div>
-          </div>
-
-          <div>
-            <div className="flex items-center justify-between">
-              <label className="text-xs font-semibold text-gray-600">추천 상품 노출 영역</label>
-              <Toggle checked={settings.showRecommended} onChange={onRecommendedToggle} />
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setProductPickerOpen(true)}
-              className="mt-2 rounded-md border border-gray-200 bg-white px-3 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-50"
-            >
-              상품 불러오기
-            </button>
-
-            {settings.selectedProducts.length > 0 && (
-              <ul className="mt-2 space-y-1.5">
-                {settings.selectedProducts.map((product) => (
-                  <li
-                    key={product.id}
-                    className="flex items-center gap-2 rounded-md border border-gray-200 px-2.5 py-1.5"
-                  >
-                    <span className="h-6 w-6 shrink-0 rounded bg-gray-100" />
-                    <span className="min-w-0 flex-1 truncate text-xs text-gray-600">{product.name}</span>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        onProductsChange(settings.selectedProducts.filter((p) => p.id !== product.id))
-                      }
-                      className="shrink-0 text-xs font-semibold text-gray-400 hover:text-red-500"
-                    >
-                      삭제
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            <ProductPickerModal
-              open={productPickerOpen}
-              selected={settings.selectedProducts}
-              onClose={() => setProductPickerOpen(false)}
-              onConfirm={(products) => {
-                onProductsChange(products);
-                setProductPickerOpen(false);
-              }}
-            />
           </div>
 
           <div>
@@ -444,25 +400,8 @@ export default function CustomLoginScreenSettingsPanel({
             )}
           </div>
 
-          <div>
-            <label className="mb-2 block text-xs font-semibold text-gray-600">푸터 정보</label>
-            <div className="grid grid-cols-2 gap-3">
-              {CUSTOM_FOOTER_FIELD_DEFS.map((field) => (
-                <div key={field.key}>
-                  <label className="mb-1 block text-[11px] text-gray-400">{field.label}</label>
-                  <input
-                    type="text"
-                    value={settings.footer[field.key]}
-                    onChange={(e) => onFooterChange(field.key, e.target.value)}
-                    className="w-full rounded-md border border-gray-200 px-2.5 py-2 text-xs text-gray-700 focus:border-gray-300 focus:outline-none"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-
           <div className="rounded-md border border-amber-100 bg-amber-50 px-3 py-2.5 text-[11px] leading-relaxed text-amber-700">
-            상단 로고 스택, 판매사/관리자 탭 로직, 아이디·비밀번호 입력 로직 등은 고정값으로 이 화면에서 변경할 수 없습니다.
+            상단 로고 스택, 아이디·비밀번호 입력 로직 등은 고정값으로 이 화면에서 변경할 수 없습니다.
           </div>
 
           <div className="flex justify-end gap-2">

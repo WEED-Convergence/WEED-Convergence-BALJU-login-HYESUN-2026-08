@@ -7,12 +7,10 @@ import CustomLoginScreenSettingsPanel from '@/components/admin/CustomLoginScreen
 import CustomLoginPreview from '@/components/admin/CustomLoginPreview';
 import {
   BannerPosition,
-  CustomFooterFields,
   CustomLoginScreenSettingsState,
   DEFAULT_CUSTOM_LOGIN_SCREEN_SETTINGS,
   FreeBlock,
 } from '@/components/admin/customLoginScreenDefaults';
-import { MockProduct } from '@/components/admin/mockProducts';
 
 type Tab = 'basic' | 'custom';
 
@@ -33,6 +31,10 @@ export default function AdminLoginCustomPage() {
       }));
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleButtonColorChange = (value: string) => {
+    setSettings((prev) => ({ ...prev, buttonColor: value }));
   };
 
   const handleBannerToggle = (enabled: boolean) => {
@@ -68,24 +70,12 @@ export default function AdminLoginCustomPage() {
     setSettings((prev) => ({ ...prev, bgColor: value }));
   };
 
-  const handleRecommendedToggle = (enabled: boolean) => {
-    setSettings((prev) => ({ ...prev, showRecommended: enabled }));
-  };
-
-  const handleProductsChange = (products: MockProduct[]) => {
-    setSettings((prev) => ({ ...prev, selectedProducts: products }));
-  };
-
   const handleAddBlock = (block: FreeBlock) => {
     setSettings((prev) => ({ ...prev, blocks: [...prev.blocks, block] }));
   };
 
   const handleRemoveBlock = (id: string) => {
     setSettings((prev) => ({ ...prev, blocks: prev.blocks.filter((b) => b.id !== id) }));
-  };
-
-  const handleFooterChange = (key: keyof CustomFooterFields, value: string) => {
-    setSettings((prev) => ({ ...prev, footer: { ...prev.footer, [key]: value } }));
   };
 
   const handleReset = () => setSettings(DEFAULT_CUSTOM_LOGIN_SCREEN_SETTINGS);
@@ -107,17 +97,15 @@ export default function AdminLoginCustomPage() {
                 onTabChange={setTab}
                 settings={settings}
                 onLogoFile={handleLogoFile}
+                onButtonColorChange={handleButtonColorChange}
                 onBannerToggle={handleBannerToggle}
                 onBannerPosition={handleBannerPosition}
                 onBannerImageFile={handleBannerImageFile}
                 onBannerLinkChange={handleBannerLinkChange}
                 onSubtitleChange={handleSubtitleChange}
                 onBgColorChange={handleBgColorChange}
-                onRecommendedToggle={handleRecommendedToggle}
-                onProductsChange={handleProductsChange}
                 onAddBlock={handleAddBlock}
                 onRemoveBlock={handleRemoveBlock}
-                onFooterChange={handleFooterChange}
                 onReset={handleReset}
               />
             </div>

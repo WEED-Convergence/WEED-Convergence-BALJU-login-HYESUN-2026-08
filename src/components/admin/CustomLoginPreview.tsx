@@ -1,11 +1,7 @@
 import TopBar from '@/components/login/TopBar';
 import LogoStack from '@/components/login/LogoStack';
-import AuthTabs from '@/components/login/AuthTabs';
 import SignupCTA from '@/components/login/SignupCTA';
-import Footer from '@/components/login/Footer';
 import { CustomLoginScreenSettingsState, FreeBlock } from './customLoginScreenDefaults';
-
-const ACCENT_COLOR = '#1F2937';
 
 interface Props {
   settings: CustomLoginScreenSettingsState;
@@ -66,15 +62,6 @@ function BlockView({ block }: { block: FreeBlock }) {
 }
 
 export default function CustomLoginPreview({ settings }: Props) {
-  const footerText = [
-    settings.footer.email,
-    settings.footer.phone,
-    settings.footer.address,
-    `개인정보책임자: ${settings.footer.privacyOfficer}`,
-    `대표이사: ${settings.footer.ceo}`,
-    `사업자번호: ${settings.footer.bizNumber}`,
-  ].join(' ㅣ ');
-
   return (
     <div className="sticky top-6">
       <p className="mb-3 text-center text-[11px] font-semibold uppercase tracking-wider text-gray-400">
@@ -114,8 +101,6 @@ export default function CustomLoginPreview({ settings }: Props) {
           </p>
         </div>
 
-        <AuthTabs />
-
         <div className="px-5 pt-4">
           <div className="space-y-2">
             <input
@@ -132,7 +117,7 @@ export default function CustomLoginPreview({ settings }: Props) {
 
           <button
             type="button"
-            style={{ backgroundColor: ACCENT_COLOR }}
+            style={{ backgroundColor: settings.buttonColor }}
             className="mt-3 w-full rounded-md py-2.5 text-xs font-bold text-white"
           >
             로그인
@@ -154,30 +139,6 @@ export default function CustomLoginPreview({ settings }: Props) {
 
         {settings.bannerEnabled && settings.bannerPosition === 'middle' && <Banner settings={settings} />}
 
-        {settings.showRecommended && (
-          <div className="px-5 pt-5">
-            <p className="mb-2 text-[11px] font-semibold text-gray-500">추천 상품</p>
-            <div className="grid grid-cols-3 gap-2">
-              {settings.selectedProducts.length > 0
-                ? settings.selectedProducts.map((product) => (
-                    <div key={product.id} className="space-y-1">
-                      <div className="aspect-square rounded-md bg-gray-100" />
-                      <p className="truncate text-[9px] text-gray-500">{product.name}</p>
-                      <p className="text-[9px] font-semibold text-gray-700">
-                        {product.price.toLocaleString()}원
-                      </p>
-                    </div>
-                  ))
-                : [1, 2, 3].map((i) => (
-                    <div key={i} className="space-y-1">
-                      <div className="aspect-square rounded-md bg-gray-100" />
-                      <div className="h-1.5 w-3/4 rounded-full bg-gray-100" />
-                    </div>
-                  ))}
-            </div>
-          </div>
-        )}
-
         {settings.blocks.length > 0 && (
           <div className="space-y-2.5 px-5 pt-5">
             {settings.blocks.map((block) => (
@@ -188,9 +149,7 @@ export default function CustomLoginPreview({ settings }: Props) {
 
         {settings.bannerEnabled && settings.bannerPosition === 'bottom' && <Banner settings={settings} />}
 
-        <div className="mt-6">
-          <Footer dark text={footerText} />
-        </div>
+        <div className="pb-6" />
       </div>
     </div>
   );

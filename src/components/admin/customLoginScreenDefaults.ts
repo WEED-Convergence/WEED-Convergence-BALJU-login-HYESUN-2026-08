@@ -1,5 +1,3 @@
-import { MockProduct } from './mockProducts';
-
 export type BannerPosition = 'top' | 'middle' | 'bottom';
 export type BlockType = 'text' | 'image' | 'link';
 
@@ -25,18 +23,10 @@ export interface LinkBlock {
 
 export type FreeBlock = TextBlock | ImageBlock | LinkBlock;
 
-export interface CustomFooterFields {
-  email: string;
-  phone: string;
-  address: string;
-  privacyOfficer: string;
-  ceo: string;
-  bizNumber: string;
-}
-
 export interface CustomLoginScreenSettingsState {
   logoDataUrl: string | null;
   logoFileName: string | null;
+  buttonColor: string;
   bannerEnabled: boolean;
   bannerPosition: BannerPosition;
   bannerImageDataUrl: string | null;
@@ -44,15 +34,13 @@ export interface CustomLoginScreenSettingsState {
   bannerLinkUrl: string;
   subtitle: string;
   bgColor: string;
-  showRecommended: boolean;
-  selectedProducts: MockProduct[];
   blocks: FreeBlock[];
-  footer: CustomFooterFields;
 }
 
 export const DEFAULT_CUSTOM_LOGIN_SCREEN_SETTINGS: CustomLoginScreenSettingsState = {
   logoDataUrl: null,
   logoFileName: null,
+  buttonColor: '#1F2937',
   bannerEnabled: true,
   bannerPosition: 'top',
   bannerImageDataUrl: null,
@@ -60,27 +48,8 @@ export const DEFAULT_CUSTOM_LOGIN_SCREEN_SETTINGS: CustomLoginScreenSettingsStat
   bannerLinkUrl: '',
   subtitle: 'My Shop 판매자센터',
   bgColor: '#ffffff',
-  showRecommended: true,
-  selectedProducts: [],
   blocks: [],
-  footer: {
-    email: 'help@company.com',
-    phone: '02-000-0000',
-    address: '서울 OO구 OO로 00',
-    privacyOfficer: '홍길동',
-    ceo: '김대표',
-    bizNumber: '000-00-00000',
-  },
 };
-
-export const CUSTOM_FOOTER_FIELD_DEFS: { key: keyof CustomFooterFields; label: string }[] = [
-  { key: 'email', label: '이메일' },
-  { key: 'phone', label: '전화번호' },
-  { key: 'address', label: '주소' },
-  { key: 'privacyOfficer', label: '개인정보책임자' },
-  { key: 'ceo', label: '대표이사' },
-  { key: 'bizNumber', label: '사업자번호' },
-];
 
 export const BANNER_POSITIONS: { key: BannerPosition; label: string }[] = [
   { key: 'top', label: '상단' },
