@@ -7,6 +7,7 @@ interface Screen {
   name: string;
   href: string;
   description: string;
+  designNote?: string;
   customizable: string[];
   fixed: string[];
 }
@@ -36,6 +37,8 @@ const SCREENS: Screen[] = [
     id: 'admin-login-custom',
     name: '커스텀 타입 관리자',
     href: '/admin-login-custom',
+    designNote:
+      '[디자인 요청사항]배너 및 자유 블록 영역에 삽입되는 이미지·텍스트 등 콘텐츠는 별도의 디자인 가이드(권장 사이즈, 파일 형식, 텍스트 분량 기준 등)가 필요합니다.',
     description:
       '파트너스 어드민에서 "로그인 - 커스텀 타입" 화면의 브랜드 요소를 설정하는 관리자 화면입니다. 좌측 설정 패널에서 값을 변경하면 우측 미리보기에 실시간으로 반영됩니다.',
     customizable: [
@@ -130,6 +133,10 @@ export default function ScreenIndex() {
           <p className="mt-0.5 text-[10px] text-gray-400">선택한 화면의 커스텀 정책 안내</p>
         </div>
         <div className="flex-1 overflow-y-auto p-5 space-y-6">
+          {selected.designNote && (
+            <p className="text-sm font-semibold leading-relaxed text-red-600">{selected.designNote}</p>
+          )}
+
           <p className="text-sm leading-relaxed text-gray-600">{selected.description}</p>
 
           <div>
