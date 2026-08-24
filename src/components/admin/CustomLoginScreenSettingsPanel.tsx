@@ -175,18 +175,22 @@ export default function CustomLoginScreenSettingsPanel({
 
   return (
     <div className="rounded-lg border border-gray-200 bg-white">
-      <div className="flex border-b border-gray-100 px-2">
-        <button
-          type="button"
-          onClick={() => router.push('/admin-login-basic')}
-          className="relative px-4 py-3 text-sm font-semibold text-gray-400 hover:text-gray-600"
-        >
+      <div className="flex items-center gap-6 border-b border-gray-100 px-5 py-4">
+        <span className="text-xs font-semibold text-gray-400">적용 타입 선택</span>
+        <label className="flex cursor-pointer items-center gap-2 text-sm font-semibold text-gray-400 hover:text-gray-600">
+          <input
+            type="radio"
+            name="screen-type"
+            checked={false}
+            onChange={() => router.push('/admin-login-basic')}
+            className="h-4 w-4 accent-gray-900"
+          />
           기본 타입
-        </button>
-        <button type="button" className="relative px-4 py-3 text-sm font-semibold text-gray-900">
+        </label>
+        <label className="flex cursor-pointer items-center gap-2 text-sm font-semibold text-gray-900">
+          <input type="radio" name="screen-type" checked readOnly className="h-4 w-4 accent-gray-900" />
           커스텀 타입
-          <span className="absolute inset-x-0 -bottom-px h-[2px] bg-gray-900" />
-        </button>
+        </label>
       </div>
 
       <div className="space-y-4 px-5 py-5">
