@@ -1,5 +1,3 @@
-import TopBar from '@/components/login/TopBar';
-import LogoStack from '@/components/login/LogoStack';
 import AuthTabs from '@/components/login/AuthTabs';
 
 const ACCENT_COLOR = '#1a8f5a';
@@ -7,10 +5,7 @@ const ACCENT_COLOR = '#1a8f5a';
 export default function StaticBasicTypePreview() {
   return (
     <div>
-      <TopBar />
-      <LogoStack />
-
-      <div className="flex items-center justify-center gap-2 px-5 pb-4">
+      <div className="flex items-center justify-center gap-2 px-5 pt-4 pb-4">
         <span className="text-xs font-semibold text-gray-700">Welcome to</span>
         <span className="flex h-6 w-16 items-center justify-center rounded bg-gray-100 text-[9px] text-gray-400">
           로고

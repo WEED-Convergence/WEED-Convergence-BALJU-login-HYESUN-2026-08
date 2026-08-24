@@ -1,8 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import TopBar from '@/components/login/TopBar';
-import LogoStack from '@/components/login/LogoStack';
 import StaticBasicTypePreview from './StaticBasicTypePreview';
 import { BannerItem, CustomLoginScreenSettingsState, FreeBlock } from './customLoginScreenDefaults';
 
@@ -121,10 +119,7 @@ function BlockView({ block }: { block: FreeBlock }) {
 function CustomTypeContent({ settings }: { settings: CustomLoginScreenSettingsState }) {
   return (
     <>
-      <TopBar />
-      <LogoStack />
-
-      <div className="px-5 pb-3">
+      <div className="px-5 pt-4 pb-3">
         {settings.logoDataUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={settings.logoDataUrl} alt="고객사 로고" className="mx-auto h-8 max-w-[140px] object-contain" />
@@ -165,15 +160,12 @@ function CustomTypeContent({ settings }: { settings: CustomLoginScreenSettingsSt
           로그인
         </button>
 
-        <label className="mt-2.5 flex items-center gap-1.5 text-[10px] text-gray-500">
-          <input type="checkbox" disabled className="h-3 w-3 rounded border-gray-300" />
-          아이디 저장하기
-        </label>
-
-        <div className="mt-3 flex items-center justify-center gap-2 text-[10px] text-gray-400">
-          <span>아이디 찾기</span>
-          <span className="text-gray-200">|</span>
-          <span>비밀번호 찾기</span>
+        <div className="mt-3 flex items-center justify-between text-[10px] text-gray-500">
+          <label className="flex items-center gap-1.5">
+            <input type="checkbox" disabled className="h-3 w-3 rounded border-gray-300" />
+            아이디 저장하기
+          </label>
+          <span className="text-gray-400">아이디 / 비밀번호 찾기</span>
         </div>
       </div>
 
@@ -183,8 +175,6 @@ function CustomTypeContent({ settings }: { settings: CustomLoginScreenSettingsSt
           입점 신청하기
         </span>
       </p>
-
-      {settings.bannerEnabled && settings.bannerPosition === 'middle' && <BannerCarousel banners={settings.banners} />}
 
       {settings.blocks.length > 0 && (
         <div className="space-y-2.5 px-5 pt-5">

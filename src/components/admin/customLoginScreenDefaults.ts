@@ -1,4 +1,4 @@
-export type BannerPosition = 'top' | 'middle' | 'bottom';
+export type BannerPosition = 'top' | 'bottom';
 export type BlockType = 'text' | 'image' | 'link';
 
 export interface TextBlock {
@@ -60,7 +60,6 @@ export const DEFAULT_CUSTOM_LOGIN_SCREEN_SETTINGS: CustomLoginScreenSettingsStat
 
 export const BANNER_POSITIONS: { key: BannerPosition; label: string }[] = [
   { key: 'top', label: '상단' },
-  { key: 'middle', label: '중단' },
   { key: 'bottom', label: '하단' },
 ];
 
