@@ -6,6 +6,7 @@ import AdminLNB from '@/components/admin/LNB';
 import CustomLoginScreenSettingsPanel from '@/components/admin/CustomLoginScreenSettingsPanel';
 import CustomLoginPreview from '@/components/admin/CustomLoginPreview';
 import {
+  BannerItem,
   BannerPosition,
   CustomLoginScreenSettingsState,
   DEFAULT_CUSTOM_LOGIN_SCREEN_SETTINGS,
@@ -42,21 +43,12 @@ export default function AdminLoginCustomPage() {
     setSettings((prev) => ({ ...prev, bannerPosition: position }));
   };
 
-  const handleBannerImageFile = (file: File | null) => {
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      setSettings((prev) => ({
-        ...prev,
-        bannerImageDataUrl: reader.result as string,
-        bannerImageFileName: file.name,
-      }));
-    };
-    reader.readAsDataURL(file);
+  const handleAddBanner = (banner: BannerItem) => {
+    setSettings((prev) => ({ ...prev, banners: [...prev.banners, banner] }));
   };
 
-  const handleBannerLinkChange = (value: string) => {
-    setSettings((prev) => ({ ...prev, bannerLinkUrl: value }));
+  const handleRemoveBanner = (id: string) => {
+    setSettings((prev) => ({ ...prev, banners: prev.banners.filter((b) => b.id !== id) }));
   };
 
   const handleSubtitleChange = (value: string) => {
@@ -95,8 +87,8 @@ export default function AdminLoginCustomPage() {
                 onButtonColorChange={handleButtonColorChange}
                 onBannerToggle={handleBannerToggle}
                 onBannerPosition={handleBannerPosition}
-                onBannerImageFile={handleBannerImageFile}
-                onBannerLinkChange={handleBannerLinkChange}
+                onAddBanner={handleAddBanner}
+                onRemoveBanner={handleRemoveBanner}
                 onSubtitleChange={handleSubtitleChange}
                 onBgColorChange={handleBgColorChange}
                 onAddBlock={handleAddBlock}

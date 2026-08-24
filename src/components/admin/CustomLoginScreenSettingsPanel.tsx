@@ -5,10 +5,13 @@ import { useRouter } from 'next/navigation';
 import {
   BANNER_POSITIONS,
   BLOCK_TYPE_DEFS,
+  BannerItem,
   BannerPosition,
   BlockType,
   CustomLoginScreenSettingsState,
   FreeBlock,
+  MAX_BANNERS,
+  nextBannerId,
   nextBlockId,
 } from './customLoginScreenDefaults';
 
@@ -18,8 +21,8 @@ interface Props {
   onButtonColorChange: (value: string) => void;
   onBannerToggle: (enabled: boolean) => void;
   onBannerPosition: (position: BannerPosition) => void;
-  onBannerImageFile: (file: File | null) => void;
-  onBannerLinkChange: (value: string) => void;
+  onAddBanner: (banner: BannerItem) => void;
+  onRemoveBanner: (id: string) => void;
   onSubtitleChange: (value: string) => void;
   onBgColorChange: (value: string) => void;
   onAddBlock: (block: FreeBlock) => void;
@@ -64,7 +67,10 @@ const BLOCK_TYPE_ICON: Record<BlockType, string> = {
 
 function blockSummary(block: FreeBlock): string {
   if (block.type === 'text') return block.text || '(빈 텍스트)';
-  if (block.type === 'image') return block.imageFileName ?? '(첨부된 이미지 없음)';
+  if (block.type === 'image') {
+    const name = block.imageFileName ?? '(첨부된 이미지 없음)';
+    return block.linkUrl ? `${name} → ${block.linkUrl}` : name;
+  }
   return `${block.label || '버튼'} → ${block.url || '(URL 미입력)'}`;
 }
 
@@ -74,8 +80,8 @@ export default function CustomLoginScreenSettingsPanel({
   onButtonColorChange,
   onBannerToggle,
   onBannerPosition,
-  onBannerImageFile,
-  onBannerLinkChange,
+  onAddBanner,
+  onRemoveBanner,
   onSubtitleChange,
   onBgColorChange,
   onAddBlock,
@@ -91,12 +97,41 @@ export default function CustomLoginScreenSettingsPanel({
   const [draftImageDataUrl, setDraftImageDataUrl] = useState<string | null>(null);
   const [draftImageFileName, setDraftImageFileName] = useState<string | null>(null);
 
+  const [bannerComposerOpen, setBannerComposerOpen] = useState(false);
+  const [bannerDraftImageDataUrl, setBannerDraftImageDataUrl] = useState<string | null>(null);
+  const [bannerDraftImageFileName, setBannerDraftImageFileName] = useState<string | null>(null);
+  const [bannerDraftLinkUrl, setBannerDraftLinkUrl] = useState('');
+
   const handleFileInput = (e: ChangeEvent<HTMLInputElement>) => {
     onLogoFile(e.target.files?.[0] ?? null);
   };
 
-  const handleBannerFileInput = (e: ChangeEvent<HTMLInputElement>) => {
-    onBannerImageFile(e.target.files?.[0] ?? null);
+  const handleBannerDraftImageInput = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      setBannerDraftImageDataUrl(reader.result as string);
+      setBannerDraftImageFileName(file.name);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const resetBannerComposer = () => {
+    setBannerComposerOpen(false);
+    setBannerDraftImageDataUrl(null);
+    setBannerDraftImageFileName(null);
+    setBannerDraftLinkUrl('');
+  };
+
+  const confirmAddBanner = () => {
+    onAddBanner({
+      id: nextBannerId(),
+      imageDataUrl: bannerDraftImageDataUrl,
+      imageFileName: bannerDraftImageFileName,
+      linkUrl: bannerDraftLinkUrl,
+    });
+    resetBannerComposer();
   };
 
   const handleDraftImageInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -130,6 +165,7 @@ export default function CustomLoginScreenSettingsPanel({
         type: 'image',
         imageDataUrl: draftImageDataUrl,
         imageFileName: draftImageFileName,
+        linkUrl: draftUrl,
       });
     } else {
       onAddBlock({ id: nextBlockId(), type: 'link', label: draftLabel, url: draftUrl });
@@ -203,29 +239,87 @@ export default function CustomLoginScreenSettingsPanel({
                 ))}
               </div>
 
-              <div>
-                <label className="mb-1 block text-[11px] text-gray-400">배너 이미지</label>
-                <div className="flex items-center gap-3">
-                  <label className="cursor-pointer rounded-md border border-gray-200 bg-white px-3 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-50">
-                    파일 선택
-                    <input type="file" accept="image/*" className="hidden" onChange={handleBannerFileInput} />
-                  </label>
-                  <span className="truncate text-xs text-gray-400">
-                    {settings.bannerImageFileName ?? '첨부된 파일 없음'}
-                  </span>
-                </div>
-              </div>
+              <p className="rounded-md bg-gray-50 px-2.5 py-2 text-[11px] leading-relaxed text-gray-500">
+                배너는 최대 {MAX_BANNERS}개까지 등록할 수 있으며, 등록 순으로 순차 롤링 처리됩니다.
+              </p>
 
-              <div>
-                <label className="mb-1 block text-[11px] text-gray-400">배너 클릭 시 이동 URL</label>
-                <input
-                  type="text"
-                  value={settings.bannerLinkUrl}
-                  onChange={(e) => onBannerLinkChange(e.target.value)}
-                  placeholder="https://example.com"
-                  className="w-full rounded-md border border-gray-200 px-2.5 py-2 text-xs text-gray-700 focus:border-gray-300 focus:outline-none"
-                />
-              </div>
+              {settings.banners.length > 0 && (
+                <ul className="space-y-1.5">
+                  {settings.banners.map((banner, i) => (
+                    <li
+                      key={banner.id}
+                      className="flex items-center gap-2 rounded-md border border-gray-200 px-2.5 py-2"
+                    >
+                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-gray-100 text-[10px] font-bold text-gray-500">
+                        {i + 1}
+                      </span>
+                      <span className="min-w-0 flex-1 truncate text-xs text-gray-600">
+                        {banner.imageFileName ?? '(첨부된 이미지 없음)'}
+                        {banner.linkUrl ? ` → ${banner.linkUrl}` : ''}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => onRemoveBanner(banner.id)}
+                        className="shrink-0 text-xs font-semibold text-gray-400 hover:text-red-500"
+                      >
+                        삭제
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {!bannerComposerOpen && settings.banners.length < MAX_BANNERS && (
+                <button
+                  type="button"
+                  onClick={() => setBannerComposerOpen(true)}
+                  className="w-full rounded-md border border-dashed border-gray-300 py-2 text-xs font-semibold text-gray-500 hover:bg-gray-50"
+                >
+                  + 배너 추가 ({settings.banners.length}/{MAX_BANNERS})
+                </button>
+              )}
+
+              {bannerComposerOpen && (
+                <div className="space-y-2 rounded-md border border-gray-200 p-2.5">
+                  <div className="flex items-center gap-3">
+                    <label className="cursor-pointer rounded-md border border-gray-200 bg-white px-3 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-50">
+                      파일 선택
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleBannerDraftImageInput}
+                      />
+                    </label>
+                    <span className="truncate text-xs text-gray-400">
+                      {bannerDraftImageFileName ?? '첨부된 파일 없음'}
+                    </span>
+                  </div>
+                  <input
+                    type="text"
+                    value={bannerDraftLinkUrl}
+                    onChange={(e) => setBannerDraftLinkUrl(e.target.value)}
+                    placeholder="배너 클릭 시 이동 URL"
+                    className="w-full rounded-md border border-gray-200 px-2.5 py-2 text-xs text-gray-700 focus:border-gray-300 focus:outline-none"
+                  />
+                  <div className="flex gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={resetBannerComposer}
+                      className="flex-1 rounded-md border border-gray-200 py-1.5 text-xs font-semibold text-gray-500 hover:bg-gray-50"
+                    >
+                      취소
+                    </button>
+                    <button
+                      type="button"
+                      onClick={confirmAddBanner}
+                      className="flex-1 rounded-md bg-gray-900 py-1.5 text-xs font-semibold text-white"
+                    >
+                      추가
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </Section>
@@ -332,14 +426,23 @@ export default function CustomLoginScreenSettingsPanel({
               )}
 
               {pendingType === 'image' && (
-                <div className="flex items-center gap-3">
-                  <label className="cursor-pointer rounded-md border border-gray-200 bg-white px-3 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-50">
-                    파일 선택
-                    <input type="file" accept="image/*" className="hidden" onChange={handleDraftImageInput} />
-                  </label>
-                  <span className="truncate text-xs text-gray-400">
-                    {draftImageFileName ?? '첨부된 파일 없음'}
-                  </span>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-3">
+                    <label className="cursor-pointer rounded-md border border-gray-200 bg-white px-3 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-50">
+                      파일 선택
+                      <input type="file" accept="image/*" className="hidden" onChange={handleDraftImageInput} />
+                    </label>
+                    <span className="truncate text-xs text-gray-400">
+                      {draftImageFileName ?? '첨부된 파일 없음'}
+                    </span>
+                  </div>
+                  <input
+                    type="text"
+                    value={draftUrl}
+                    onChange={(e) => setDraftUrl(e.target.value)}
+                    placeholder="배너 클릭 시 이동 URL"
+                    className="w-full rounded-md border border-gray-200 px-2.5 py-2 text-xs text-gray-700 focus:border-gray-300 focus:outline-none"
+                  />
                 </div>
               )}
 

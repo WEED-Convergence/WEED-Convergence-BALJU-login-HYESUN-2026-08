@@ -12,6 +12,7 @@ export interface ImageBlock {
   type: 'image';
   imageDataUrl: string | null;
   imageFileName: string | null;
+  linkUrl: string;
 }
 
 export interface LinkBlock {
@@ -23,15 +24,22 @@ export interface LinkBlock {
 
 export type FreeBlock = TextBlock | ImageBlock | LinkBlock;
 
+export interface BannerItem {
+  id: string;
+  imageDataUrl: string | null;
+  imageFileName: string | null;
+  linkUrl: string;
+}
+
+export const MAX_BANNERS = 3;
+
 export interface CustomLoginScreenSettingsState {
   logoDataUrl: string | null;
   logoFileName: string | null;
   buttonColor: string;
   bannerEnabled: boolean;
   bannerPosition: BannerPosition;
-  bannerImageDataUrl: string | null;
-  bannerImageFileName: string | null;
-  bannerLinkUrl: string;
+  banners: BannerItem[];
   subtitle: string;
   bgColor: string;
   blocks: FreeBlock[];
@@ -43,9 +51,7 @@ export const DEFAULT_CUSTOM_LOGIN_SCREEN_SETTINGS: CustomLoginScreenSettingsStat
   buttonColor: '#1F2937',
   bannerEnabled: false,
   bannerPosition: 'top',
-  bannerImageDataUrl: null,
-  bannerImageFileName: null,
-  bannerLinkUrl: '',
+  banners: [],
   subtitle: 'My Shop 판매자센터',
   bgColor: '#ffffff',
   blocks: [],
@@ -63,8 +69,16 @@ export const BLOCK_TYPE_DEFS: { key: BlockType; label: string }[] = [
   { key: 'link', label: '링크 버튼 블록' },
 ];
 
-let blockIdCounter = 0;
+let idCounter = 0;
+function nextId(prefix: string): string {
+  idCounter += 1;
+  return `${prefix}-${Date.now().toString(36)}-${idCounter}`;
+}
+
 export function nextBlockId(): string {
-  blockIdCounter += 1;
-  return `block-${Date.now().toString(36)}-${blockIdCounter}`;
+  return nextId('block');
+}
+
+export function nextBannerId(): string {
+  return nextId('banner');
 }
