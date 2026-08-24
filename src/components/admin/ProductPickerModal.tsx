@@ -40,7 +40,7 @@ export default function ProductPickerModal({ open, selected, onClose, onConfirm 
       onClick={onClose}
     >
       <div
-        className="flex max-h-full w-full max-w-3xl flex-col overflow-hidden rounded-lg bg-white shadow-xl"
+        className="flex max-h-full w-full max-w-4xl flex-col overflow-hidden rounded-lg bg-white shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
@@ -100,8 +100,8 @@ export default function ProductPickerModal({ open, selected, onClose, onConfirm 
               </div>
             </div>
 
-            <div className="grid grid-cols-4 items-start gap-3">
-              <div className="col-span-2">
+            <div className="grid grid-cols-2 items-start gap-3">
+              <div>
                 <label className="mb-1 block text-[11px] text-gray-400">날짜검색</label>
                 <div className="flex items-center gap-1.5">
                   <select className="shrink-0 rounded-md border border-gray-200 px-2 py-2 text-xs text-gray-700 focus:border-gray-300 focus:outline-none">
@@ -128,25 +128,26 @@ export default function ProductPickerModal({ open, selected, onClose, onConfirm 
                   className="w-full rounded-md border border-gray-200 px-2.5 py-2 text-xs text-gray-700 focus:border-gray-300 focus:outline-none"
                 />
               </div>
-              <div className="space-y-1.5 pt-5">
-                <div className="flex items-center gap-2 text-xs text-gray-600">
-                  <span className="w-16 shrink-0 text-[11px] text-gray-400">전체공개여부</span>
-                  {['전체', '사용', '미사용'].map((label, i) => (
-                    <label key={label} className="flex items-center gap-1">
-                      <input type="radio" name="public-scope" defaultChecked={i === 0} className="h-3 w-3" />
-                      {label}
-                    </label>
-                  ))}
-                </div>
-                <div className="flex items-center gap-2 text-xs text-gray-600">
-                  <span className="w-16 shrink-0 text-[11px] text-gray-400">판매여부</span>
-                  {['전체', '판매', '미판매'].map((label, i) => (
-                    <label key={label} className="flex items-center gap-1">
-                      <input type="radio" name="sale-scope" defaultChecked={i === 1} className="h-3 w-3" />
-                      {label}
-                    </label>
-                  ))}
-                </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
+              <div className="flex items-center gap-3 text-xs text-gray-600">
+                <span className="shrink-0 text-[11px] text-gray-400">전체공개여부</span>
+                {['전체', '사용', '미사용'].map((label, i) => (
+                  <label key={label} className="flex shrink-0 items-center gap-1 whitespace-nowrap">
+                    <input type="radio" name="public-scope" defaultChecked={i === 0} className="h-3 w-3" />
+                    {label}
+                  </label>
+                ))}
+              </div>
+              <div className="flex items-center gap-3 text-xs text-gray-600">
+                <span className="shrink-0 text-[11px] text-gray-400">판매여부</span>
+                {['전체', '판매', '미판매'].map((label, i) => (
+                  <label key={label} className="flex shrink-0 items-center gap-1 whitespace-nowrap">
+                    <input type="radio" name="sale-scope" defaultChecked={i === 1} className="h-3 w-3" />
+                    {label}
+                  </label>
+                ))}
               </div>
             </div>
 
