@@ -12,6 +12,7 @@ import {
   DEFAULT_CUSTOM_LOGIN_SCREEN_SETTINGS,
   FreeBlock,
 } from '@/components/admin/customLoginScreenDefaults';
+import { MockProduct } from '@/components/admin/mockProducts';
 
 type Tab = 'basic' | 'custom';
 
@@ -54,6 +55,10 @@ export default function AdminLoginCustomPage() {
     setSettings((prev) => ({ ...prev, showRecommended: enabled }));
   };
 
+  const handleProductsChange = (products: MockProduct[]) => {
+    setSettings((prev) => ({ ...prev, selectedProducts: products }));
+  };
+
   const handleAddBlock = (block: FreeBlock) => {
     setSettings((prev) => ({ ...prev, blocks: [...prev.blocks, block] }));
   };
@@ -90,6 +95,7 @@ export default function AdminLoginCustomPage() {
                 onSubtitleChange={handleSubtitleChange}
                 onBgColorChange={handleBgColorChange}
                 onRecommendedToggle={handleRecommendedToggle}
+                onProductsChange={handleProductsChange}
                 onAddBlock={handleAddBlock}
                 onRemoveBlock={handleRemoveBlock}
                 onFooterChange={handleFooterChange}

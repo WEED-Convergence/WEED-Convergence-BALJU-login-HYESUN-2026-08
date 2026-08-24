@@ -12,6 +12,8 @@ import {
   FreeBlock,
   nextBlockId,
 } from './customLoginScreenDefaults';
+import { MockProduct } from './mockProducts';
+import ProductPickerModal from './ProductPickerModal';
 
 type Tab = 'basic' | 'custom';
 
@@ -25,6 +27,7 @@ interface Props {
   onSubtitleChange: (value: string) => void;
   onBgColorChange: (value: string) => void;
   onRecommendedToggle: (enabled: boolean) => void;
+  onProductsChange: (products: MockProduct[]) => void;
   onAddBlock: (block: FreeBlock) => void;
   onRemoveBlock: (id: string) => void;
   onFooterChange: (key: keyof CustomFooterFields, value: string) => void;
@@ -73,11 +76,13 @@ export default function CustomLoginScreenSettingsPanel({
   onSubtitleChange,
   onBgColorChange,
   onRecommendedToggle,
+  onProductsChange,
   onAddBlock,
   onRemoveBlock,
   onFooterChange,
   onReset,
 }: Props) {
+  const [productPickerOpen, setProductPickerOpen] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [pendingType, setPendingType] = useState<BlockType | null>(null);
   const [draftText, setDraftText] = useState('');
@@ -226,9 +231,52 @@ export default function CustomLoginScreenSettingsPanel({
             </div>
           </div>
 
-          <div className="flex items-center justify-between">
-            <label className="text-xs font-semibold text-gray-600">추천 상품 노출 영역</label>
-            <Toggle checked={settings.showRecommended} onChange={onRecommendedToggle} />
+          <div>
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-semibold text-gray-600">추천 상품 노출 영역</label>
+              <Toggle checked={settings.showRecommended} onChange={onRecommendedToggle} />
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setProductPickerOpen(true)}
+              className="mt-2 rounded-md border border-gray-200 bg-white px-3 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-50"
+            >
+              상품 불러오기
+            </button>
+
+            {settings.selectedProducts.length > 0 && (
+              <ul className="mt-2 space-y-1.5">
+                {settings.selectedProducts.map((product) => (
+                  <li
+                    key={product.id}
+                    className="flex items-center gap-2 rounded-md border border-gray-200 px-2.5 py-1.5"
+                  >
+                    <span className="h-6 w-6 shrink-0 rounded bg-gray-100" />
+                    <span className="min-w-0 flex-1 truncate text-xs text-gray-600">{product.name}</span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onProductsChange(settings.selectedProducts.filter((p) => p.id !== product.id))
+                      }
+                      className="shrink-0 text-xs font-semibold text-gray-400 hover:text-red-500"
+                    >
+                      삭제
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <ProductPickerModal
+              open={productPickerOpen}
+              selected={settings.selectedProducts}
+              onClose={() => setProductPickerOpen(false)}
+              onConfirm={(products) => {
+                onProductsChange(products);
+                setProductPickerOpen(false);
+              }}
+            />
           </div>
 
           <div>

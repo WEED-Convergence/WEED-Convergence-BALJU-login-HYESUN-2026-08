@@ -1,3 +1,5 @@
+import { MockProduct } from './mockProducts';
+
 export type BannerPosition = 'top' | 'middle' | 'bottom';
 export type BlockType = 'text' | 'image' | 'link';
 
@@ -40,6 +42,7 @@ export interface CustomLoginScreenSettingsState {
   subtitle: string;
   bgColor: string;
   showRecommended: boolean;
+  selectedProducts: MockProduct[];
   blocks: FreeBlock[];
   footer: CustomFooterFields;
 }
@@ -52,6 +55,7 @@ export const DEFAULT_CUSTOM_LOGIN_SCREEN_SETTINGS: CustomLoginScreenSettingsStat
   subtitle: 'My Shop 판매자센터',
   bgColor: '#ffffff',
   showRecommended: true,
+  selectedProducts: [],
   blocks: [],
   footer: {
     email: 'help@company.com',
