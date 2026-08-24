@@ -30,15 +30,14 @@ export default function LoginFields({ accentColor }: Props) {
         </button>
       </CustomZone>
 
-      <label className="mt-3 flex items-center gap-1.5 text-xs text-gray-500">
-        <input type="checkbox" className="h-3.5 w-3.5 rounded border-gray-300" />
-        아이디 저장하기
-      </label>
-
-      <div className="mt-4 flex items-center justify-center gap-3 text-xs text-gray-400">
-        <button type="button" className="hover:text-gray-600">아이디 찾기</button>
-        <span className="text-gray-200">|</span>
-        <button type="button" className="hover:text-gray-600">비밀번호 찾기</button>
+      <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
+        <label className="flex items-center gap-1.5">
+          <input type="checkbox" className="h-3.5 w-3.5 rounded border-gray-300" />
+          아이디 저장하기
+        </label>
+        <button type="button" className="text-gray-400 hover:text-gray-600">
+          아이디 / 비밀번호 찾기
+        </button>
       </div>
     </div>
   );

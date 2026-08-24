@@ -1,14 +1,11 @@
 import PhoneFrame from '@/components/login/PhoneFrame';
 import TopBar from '@/components/login/TopBar';
 import LogoStack from '@/components/login/LogoStack';
-import AuthTabs from '@/components/login/AuthTabs';
 import LoginFields from '@/components/login/LoginFields';
 import SignupCTA from '@/components/login/SignupCTA';
-import Footer from '@/components/login/Footer';
 import CustomZone from '@/components/login/CustomZone';
 import BannerZone from '@/components/login/BannerZone';
 import SubtitleZone from '@/components/login/SubtitleZone';
-import RecommendedProducts from '@/components/login/RecommendedProducts';
 import FreeBlockZone from '@/components/login/FreeBlockZone';
 
 const ACCENT_COLOR = '#1F2937';
@@ -28,20 +25,11 @@ export default function LoginCustomPage() {
       <BannerZone />
       <SubtitleZone />
 
-      <AuthTabs />
       <LoginFields accentColor={ACCENT_COLOR} />
       <SignupCTA />
-      <RecommendedProducts />
       <FreeBlockZone />
 
-      <div className="px-6 pt-6">
-        <CustomZone label="커스텀 · 푸터 색상/레이아웃 (필수 정보 유지)" className="overflow-hidden p-0">
-          <Footer
-            dark
-            text="발주모아 파트너스 ㅣ My Shop 주식회사 ㅣ 대표: 김철수 ㅣ 사업자등록번호: 000-00-00000 ㅣ 고객센터: 1544-0000"
-          />
-        </CustomZone>
-      </div>
+      <div className="pb-6" />
     </PhoneFrame>
   );
 }
