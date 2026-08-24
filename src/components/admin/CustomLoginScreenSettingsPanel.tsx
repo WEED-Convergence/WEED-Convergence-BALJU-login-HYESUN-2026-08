@@ -15,6 +15,8 @@ import {
 } from './customLoginScreenDefaults';
 
 interface Props {
+  screenType: 'basic' | 'custom';
+  onScreenTypeChange: (type: 'basic' | 'custom') => void;
   settings: CustomLoginScreenSettingsState;
   onLogoFile: (file: File | null) => void;
   onButtonColorChange: (value: string) => void;
@@ -74,6 +76,8 @@ function blockSummary(block: FreeBlock): string {
 }
 
 export default function CustomLoginScreenSettingsPanel({
+  screenType,
+  onScreenTypeChange,
   settings,
   onLogoFile,
   onButtonColorChange,
@@ -92,6 +96,7 @@ export default function CustomLoginScreenSettingsPanel({
   const [draftText, setDraftText] = useState('');
   const [draftLabel, setDraftLabel] = useState('');
   const [draftUrl, setDraftUrl] = useState('');
+  const [draftLinkColor, setDraftLinkColor] = useState('#1a8f5a');
   const [draftImageDataUrl, setDraftImageDataUrl] = useState<string | null>(null);
   const [draftImageFileName, setDraftImageFileName] = useState<string | null>(null);
 
@@ -149,6 +154,7 @@ export default function CustomLoginScreenSettingsPanel({
     setDraftText('');
     setDraftLabel('');
     setDraftUrl('');
+    setDraftLinkColor('#1a8f5a');
     setDraftImageDataUrl(null);
     setDraftImageFileName(null);
   };
@@ -166,7 +172,13 @@ export default function CustomLoginScreenSettingsPanel({
         linkUrl: draftUrl,
       });
     } else {
-      onAddBlock({ id: nextBlockId(), type: 'link', label: draftLabel, url: draftUrl });
+      onAddBlock({
+        id: nextBlockId(),
+        type: 'link',
+        label: draftLabel,
+        url: draftUrl,
+        color: draftLinkColor,
+      });
     }
     resetComposer();
   };
@@ -175,12 +187,46 @@ export default function CustomLoginScreenSettingsPanel({
     <div className="rounded-lg border border-gray-200 bg-white">
       <div className="flex items-center gap-6 border-b border-gray-100 px-5 py-4">
         <span className="text-xs font-semibold text-gray-400">적용 타입 선택</span>
-        <label className="flex cursor-pointer items-center gap-2 text-sm font-semibold text-gray-900">
-          <input type="radio" name="screen-type" checked readOnly className="h-4 w-4 accent-gray-900" />
+        <label
+          className={`flex cursor-pointer items-center gap-2 text-sm font-semibold ${
+            screenType === 'basic' ? 'text-gray-900' : 'text-gray-400 hover:text-gray-600'
+          }`}
+        >
+          <input
+            type="radio"
+            name="screen-type"
+            checked={screenType === 'basic'}
+            onChange={() => onScreenTypeChange('basic')}
+            className="h-4 w-4 accent-gray-900"
+          />
+          기본 타입
+        </label>
+        <label
+          className={`flex cursor-pointer items-center gap-2 text-sm font-semibold ${
+            screenType === 'custom' ? 'text-gray-900' : 'text-gray-400 hover:text-gray-600'
+          }`}
+        >
+          <input
+            type="radio"
+            name="screen-type"
+            checked={screenType === 'custom'}
+            onChange={() => onScreenTypeChange('custom')}
+            className="h-4 w-4 accent-gray-900"
+          />
           커스텀 타입
         </label>
       </div>
 
+      {screenType === 'basic' ? (
+        <div className="flex flex-col items-center justify-center gap-2 px-6 py-16 text-center">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.4} className="h-8 w-8 text-gray-300">
+            <rect x="4" y="2" width="16" height="20" rx="2" />
+            <path d="M9 18h6" />
+          </svg>
+          <p className="text-sm font-semibold text-gray-500">기본 타입은 고정 레이아웃으로 제공됩니다.</p>
+          <p className="text-xs text-gray-400">별도로 편집할 수 있는 항목이 없으며, 우측 미리보기에서 정적 화면을 확인할 수 있습니다.</p>
+        </div>
+      ) : (
       <div className="space-y-4 px-5 py-5">
         <Section title="로고 영역">
           <div className="flex items-center gap-3">
@@ -454,6 +500,18 @@ export default function CustomLoginScreenSettingsPanel({
                     placeholder="이동 URL"
                     className="w-full rounded-md border border-gray-200 px-2.5 py-2 text-xs text-gray-700 focus:border-gray-300 focus:outline-none"
                   />
+                  <div>
+                    <label className="mb-1 block text-[11px] text-gray-400">버튼 색상</label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={draftLinkColor}
+                        onChange={(e) => setDraftLinkColor(e.target.value)}
+                        className="h-8 w-8 cursor-pointer rounded border border-gray-200 p-0.5"
+                      />
+                      <span className="font-mono text-xs text-gray-500">{draftLinkColor}</span>
+                    </div>
+                  </div>
                 </div>
               )}
 
@@ -497,6 +555,7 @@ export default function CustomLoginScreenSettingsPanel({
           </button>
         </div>
       </div>
+      )}
     </div>
   );
 }

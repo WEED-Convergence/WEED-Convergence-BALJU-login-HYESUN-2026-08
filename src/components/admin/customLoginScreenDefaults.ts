@@ -20,6 +20,7 @@ export interface LinkBlock {
   type: 'link';
   label: string;
   url: string;
+  color: string;
 }
 
 export type FreeBlock = TextBlock | ImageBlock | LinkBlock;

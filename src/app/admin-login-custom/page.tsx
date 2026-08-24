@@ -14,6 +14,7 @@ import {
 } from '@/components/admin/customLoginScreenDefaults';
 
 export default function AdminLoginCustomPage() {
+  const [screenType, setScreenType] = useState<'basic' | 'custom'>('custom');
   const [settings, setSettings] = useState<CustomLoginScreenSettingsState>(
     DEFAULT_CUSTOM_LOGIN_SCREEN_SETTINGS
   );
@@ -82,6 +83,8 @@ export default function AdminLoginCustomPage() {
           <div className="flex flex-wrap gap-6 p-6">
             <div className="min-w-[360px] flex-1">
               <CustomLoginScreenSettingsPanel
+                screenType={screenType}
+                onScreenTypeChange={setScreenType}
                 settings={settings}
                 onLogoFile={handleLogoFile}
                 onButtonColorChange={handleButtonColorChange}
@@ -97,7 +100,7 @@ export default function AdminLoginCustomPage() {
               />
             </div>
             <div className="w-[320px] shrink-0">
-              <CustomLoginPreview settings={settings} />
+              <CustomLoginPreview settings={settings} screenType={screenType} />
             </div>
           </div>
         </main>
