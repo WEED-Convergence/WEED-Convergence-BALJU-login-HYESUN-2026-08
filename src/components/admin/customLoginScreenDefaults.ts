@@ -39,6 +39,9 @@ export interface CustomLoginScreenSettingsState {
   logoFileName: string | null;
   bannerEnabled: boolean;
   bannerPosition: BannerPosition;
+  bannerImageDataUrl: string | null;
+  bannerImageFileName: string | null;
+  bannerLinkUrl: string;
   subtitle: string;
   bgColor: string;
   showRecommended: boolean;
@@ -52,6 +55,9 @@ export const DEFAULT_CUSTOM_LOGIN_SCREEN_SETTINGS: CustomLoginScreenSettingsStat
   logoFileName: null,
   bannerEnabled: true,
   bannerPosition: 'top',
+  bannerImageDataUrl: null,
+  bannerImageFileName: null,
+  bannerLinkUrl: '',
   subtitle: 'My Shop 판매자센터',
   bgColor: '#ffffff',
   showRecommended: true,

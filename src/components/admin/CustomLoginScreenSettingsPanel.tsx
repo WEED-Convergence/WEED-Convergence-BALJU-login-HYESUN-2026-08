@@ -24,6 +24,8 @@ interface Props {
   onLogoFile: (file: File | null) => void;
   onBannerToggle: (enabled: boolean) => void;
   onBannerPosition: (position: BannerPosition) => void;
+  onBannerImageFile: (file: File | null) => void;
+  onBannerLinkChange: (value: string) => void;
   onSubtitleChange: (value: string) => void;
   onBgColorChange: (value: string) => void;
   onRecommendedToggle: (enabled: boolean) => void;
@@ -73,6 +75,8 @@ export default function CustomLoginScreenSettingsPanel({
   onLogoFile,
   onBannerToggle,
   onBannerPosition,
+  onBannerImageFile,
+  onBannerLinkChange,
   onSubtitleChange,
   onBgColorChange,
   onRecommendedToggle,
@@ -93,6 +97,10 @@ export default function CustomLoginScreenSettingsPanel({
 
   const handleFileInput = (e: ChangeEvent<HTMLInputElement>) => {
     onLogoFile(e.target.files?.[0] ?? null);
+  };
+
+  const handleBannerFileInput = (e: ChangeEvent<HTMLInputElement>) => {
+    onBannerImageFile(e.target.files?.[0] ?? null);
   };
 
   const handleDraftImageInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -188,21 +196,47 @@ export default function CustomLoginScreenSettingsPanel({
               <Toggle checked={settings.bannerEnabled} onChange={onBannerToggle} />
             </div>
             {settings.bannerEnabled && (
-              <div className="flex gap-1.5">
-                {BANNER_POSITIONS.map((pos) => (
-                  <button
-                    key={pos.key}
-                    type="button"
-                    onClick={() => onBannerPosition(pos.key)}
-                    className={`rounded-md border px-3 py-1.5 text-xs font-semibold ${
-                      settings.bannerPosition === pos.key
-                        ? 'border-[#1a8f5a] bg-[#1a8f5a]/10 text-[#1a8f5a]'
-                        : 'border-gray-200 text-gray-500 hover:bg-gray-50'
-                    }`}
-                  >
-                    {pos.label}
-                  </button>
-                ))}
+              <div className="space-y-3">
+                <div className="flex gap-1.5">
+                  {BANNER_POSITIONS.map((pos) => (
+                    <button
+                      key={pos.key}
+                      type="button"
+                      onClick={() => onBannerPosition(pos.key)}
+                      className={`rounded-md border px-3 py-1.5 text-xs font-semibold ${
+                        settings.bannerPosition === pos.key
+                          ? 'border-[#1a8f5a] bg-[#1a8f5a]/10 text-[#1a8f5a]'
+                          : 'border-gray-200 text-gray-500 hover:bg-gray-50'
+                      }`}
+                    >
+                      {pos.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div>
+                  <label className="mb-1 block text-[11px] text-gray-400">배너 이미지</label>
+                  <div className="flex items-center gap-3">
+                    <label className="cursor-pointer rounded-md border border-gray-200 bg-white px-3 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-50">
+                      파일 선택
+                      <input type="file" accept="image/*" className="hidden" onChange={handleBannerFileInput} />
+                    </label>
+                    <span className="truncate text-xs text-gray-400">
+                      {settings.bannerImageFileName ?? '첨부된 파일 없음'}
+                    </span>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="mb-1 block text-[11px] text-gray-400">배너 클릭 시 이동 URL</label>
+                  <input
+                    type="text"
+                    value={settings.bannerLinkUrl}
+                    onChange={(e) => onBannerLinkChange(e.target.value)}
+                    placeholder="https://example.com"
+                    className="w-full rounded-md border border-gray-200 px-2.5 py-2 text-xs text-gray-700 focus:border-gray-300 focus:outline-none"
+                  />
+                </div>
               </div>
             )}
           </div>

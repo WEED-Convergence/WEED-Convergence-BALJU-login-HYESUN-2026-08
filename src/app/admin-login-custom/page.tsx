@@ -43,6 +43,23 @@ export default function AdminLoginCustomPage() {
     setSettings((prev) => ({ ...prev, bannerPosition: position }));
   };
 
+  const handleBannerImageFile = (file: File | null) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      setSettings((prev) => ({
+        ...prev,
+        bannerImageDataUrl: reader.result as string,
+        bannerImageFileName: file.name,
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleBannerLinkChange = (value: string) => {
+    setSettings((prev) => ({ ...prev, bannerLinkUrl: value }));
+  };
+
   const handleSubtitleChange = (value: string) => {
     setSettings((prev) => ({ ...prev, subtitle: value }));
   };
@@ -92,6 +109,8 @@ export default function AdminLoginCustomPage() {
                 onLogoFile={handleLogoFile}
                 onBannerToggle={handleBannerToggle}
                 onBannerPosition={handleBannerPosition}
+                onBannerImageFile={handleBannerImageFile}
+                onBannerLinkChange={handleBannerLinkChange}
                 onSubtitleChange={handleSubtitleChange}
                 onBgColorChange={handleBgColorChange}
                 onRecommendedToggle={handleRecommendedToggle}
