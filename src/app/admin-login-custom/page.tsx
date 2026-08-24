@@ -12,10 +12,7 @@ import {
   FreeBlock,
 } from '@/components/admin/customLoginScreenDefaults';
 
-type Tab = 'basic' | 'custom';
-
 export default function AdminLoginCustomPage() {
-  const [tab, setTab] = useState<Tab>('custom');
   const [settings, setSettings] = useState<CustomLoginScreenSettingsState>(
     DEFAULT_CUSTOM_LOGIN_SCREEN_SETTINGS
   );
@@ -93,8 +90,6 @@ export default function AdminLoginCustomPage() {
           <div className="flex flex-wrap gap-6 p-6">
             <div className="min-w-[360px] flex-1">
               <CustomLoginScreenSettingsPanel
-                tab={tab}
-                onTabChange={setTab}
                 settings={settings}
                 onLogoFile={handleLogoFile}
                 onButtonColorChange={handleButtonColorChange}

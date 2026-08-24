@@ -1,6 +1,5 @@
 import TopBar from '@/components/login/TopBar';
 import LogoStack from '@/components/login/LogoStack';
-import SignupCTA from '@/components/login/SignupCTA';
 import { CustomLoginScreenSettingsState, FreeBlock } from './customLoginScreenDefaults';
 
 interface Props {
@@ -135,7 +134,12 @@ export default function CustomLoginPreview({ settings }: Props) {
           </div>
         </div>
 
-        <SignupCTA />
+        <p className="px-5 pt-5 text-center text-[11px] leading-relaxed text-gray-500">
+          판매사 회원가입 후 발주를 시작하세요.{' '}
+          <span className="cursor-pointer font-semibold text-[#1a8f5a] underline underline-offset-2">
+            입점 신청하기
+          </span>
+        </p>
 
         {settings.bannerEnabled && settings.bannerPosition === 'middle' && <Banner settings={settings} />}
 

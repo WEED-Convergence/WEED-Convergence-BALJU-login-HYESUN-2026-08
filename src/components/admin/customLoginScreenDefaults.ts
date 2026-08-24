@@ -41,7 +41,7 @@ export const DEFAULT_CUSTOM_LOGIN_SCREEN_SETTINGS: CustomLoginScreenSettingsStat
   logoDataUrl: null,
   logoFileName: null,
   buttonColor: '#1F2937',
-  bannerEnabled: true,
+  bannerEnabled: false,
   bannerPosition: 'top',
   bannerImageDataUrl: null,
   bannerImageFileName: null,
